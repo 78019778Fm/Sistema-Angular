@@ -23,5 +23,38 @@
     "TITLE": "Manual",
     "M_USER": "User manual",
     "M_INC": "Manual of incidents"
+  },
+  "COMUN": {
+    "ACCION": {
+      "NUEVO": "New",
+      "EDITAR": "Edit",
+      "VER": "View",
+      "ACTIVAR": "Activate",
+      "DESACTIVAR": "Disable",
+      "ELIMINAR": "Delete",
+      "BUSCAR": "Search",
+      "LIMPIAR": "Clean",
+      "SI": "Yes",
+      "NO": "Not"
+    },
+    "TABLA": {
+      "MOSTRANDO": "Showing",
+      "COLUMNAS_SELECCIONADAS": "Selected Columns",
+      "SELECCIONAR": "Select columns"
+    },
+    "PANEL": {
+      "FILTROS": "Filters"
+    },
+    "ESTADO": {
+      "ACTIVA": "Active",
+      "INACTIVA": "Inactive"
+    }
+  },
+  "CATEGORIAS": {
+    "TABLA": {
+      "CATEGORIA": "Category",
+      "VIGENCIA": "Validity",
+      "NO_ELEMENTOS": "No categories"
+    }
   }
 }

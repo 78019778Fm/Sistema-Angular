@@ -1,0 +1,11 @@
+<p>
+  categorias-main works!
+</p>
+
+<app-categorias-table #categoriasTable (onColumnSelect)="columnaSeleccionada($event)"
+                      (onLazyLoad)="cargarRegistrosTabla($event)"
+                      (onRowSelect)="seleccionarRegistro($event)"
+                      [colsCategorias]="colsCategorias"
+                      [isLoading]="isLoading"
+                      [page]="page" [selectedColumnsCategoria]="selectedColumnsCategoria">
+</app-categorias-table>

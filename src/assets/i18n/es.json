@@ -23,5 +23,38 @@
     "TITLE": "Manual",
     "M_USER": "Manual de usuario",
     "M_INC": "Manual de incidencias"
+  },
+  "COMUN": {
+    "ACCION": {
+      "NUEVO": "Nuevo",
+      "EDITAR": "Editar",
+      "VER": "Ver",
+      "ACTIVAR": "Activar",
+      "DESACTIVAR": "Desactivar",
+      "ELIMINAR": "Eliminar",
+      "BUSCAR": "Buscar",
+      "LIMPIAR": "Limpiar",
+      "SI": "Sí",
+      "NO": "No"
+    },
+    "TABLA": {
+      "MOSTRANDO": "Mostrando",
+      "COLUMNAS_SELECCIONADAS": "Columnas seleccionadas",
+      "SELECCIONAR": "Seleccionar columnas"
+    },
+    "PANEL": {
+      "FILTROS": "Filtros"
+    },
+    "ESTADO": {
+      "ACTIVA": "Activa",
+      "INACTIVA": "Inactive"
+    }
+  },
+  "CATEGORIAS": {
+    "TABLA": {
+      "CATEGORIA": "Categoría",
+      "VIGENCIA": "Vigencia",
+      "NO_ELEMENTOS": "No hay categorías"
+    }
   }
 }
