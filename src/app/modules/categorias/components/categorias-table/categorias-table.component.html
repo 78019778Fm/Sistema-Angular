@@ -1,0 +1,93 @@
+<p-table #table [scrollable]="false" [columns]="colsCategorias" [lazy]="true" [loading]="isLoading"
+         [value]="page.content" selectionMode="single" [(selection)]="registroSeleccionado" (onRowSelect)="rowSelect($event)"
+         (onRowUnselect)="rowUnselect($event)" [paginator]="true" [rows]="rows" [totalRecords]="page.totalElements"
+         (onLazyLoad)="lazyLoad($event)" [responsive]="true" stateStorage="session" stateKey="statedemo-session"
+         [sortOrder]="1" [resizableColumns]="true" [autoLayout]="true" [rowsPerPageOptions]="[10,15,20]">
+
+  <!-- Esto representa la parte superior de la tabla-->
+  <ng-template pTemplate="caption" class="">
+    <div class="ui-g ui-fluid" [style]="{overflow: 'visible'}">
+      <div class="ui-g-12 ui-md-2">
+        <p-multiSelect [options]="selectedColumnsCategoria" [(ngModel)]="colsCategorias" optionLabel="header"
+                       selectedItemsLabel="{0} {{ 'COMUN.TABLA.COLUMNAS_SELECCIONADAS' |
+        translate }}" [style]="{minWidth: '200px'}" defaultLabel="{{ 'COMUN.TABLA.SELECCIONAR' |
+        translate }}" (onChange)="columnSelect($event)"></p-multiSelect>
+      </div>
+      <div class="ui-g-12 ui-md-6">
+      </div>
+      <div class="ui-g-12 ui-md-4">
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="colgroup" let-columns>
+    <colgroup>
+      <col *ngFor="let col of getColumns(columns)" [style.width]="getNgStyleWidthHeader(col)">
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header" let-categoria let-columns>
+    <tr>
+      <!--<th nowrap></th>-->
+      <th *ngFor="let col of getColumns(columns)"
+          pSortableColumn="{{ col.subfield ? col.field+'.'+col.subfield : col.field }}" pResizableColumn
+          [ngStyle]="{'width':getNgStyleWidthHeader(col)}" pTooltip="{{ col.header | translate }}" class="td_ellipsis">
+        {{ col.header | translate }}
+        <p-sortIcon field="{{ col.field }}">
+        </p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-categoria let-columns="columns">
+    <tr [pSelectableRow]="categoria">
+      <td *ngFor="let col of getColumns(columns)" pTooltip="{{ col.subfield
+        ? categoria[col.field]
+          ? !col.subfield.includes('.')
+            ? categoria[col.field][col.subfield]
+            : categoria[col.field][col.subfield.split('.')[0]][col.subfield.split('.')[1]]
+          : '-'
+        : categoria[col.field] }}">
+        <div *ngIf="col.subfield;then nested_object_content else normal_content"></div>
+
+        <ng-template #nested_object_content>
+          <div *ngIf="categoria[col.field] !== null && !col.subfield.includes('.')">
+            {{ categoria[col.field][col.subfield]}}
+          </div>
+          <div *ngIf="categoria[col.field] !== null && col.subfield.includes('.')">
+            {{ categoria[col.field][col.subfield.split('.')[0]][col.subfield.split('.')[1]]}}
+          </div>
+          <div *ngIf="categoria[col.field] === null">
+            <span class="ui-column-title">{{ col.header | translate }}</span> -
+          </div>
+        </ng-template>
+
+        <ng-template #normal_content>
+          <div *ngIf="categoria[col.field]">
+            <span class="ui-column-title">{{ col.header | translate }}</span>{{ categoria[col.field] }}
+          </div>
+          <div *ngIf="!categoria[col.field]">
+            <span class="ui-column-title">{{ col.header | translate }}</span> -
+          </div>
+        </ng-template>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="2">
+        {{'CATEGORIAS.TABLA.NO_ELEMENTOS' | translate}}
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="paginatorright" let-state>
+    <div>{{ 'COMUN.TABLA.MOSTRANDO' | translate }} del {{state.totalRecords === 0 ? 0 : (state.page  * state.rows) + 1}}
+      al
+      {{( state.rows * (state.page + 1) ) > state.totalRecords ? state.totalRecords : state.rows * (state.page + 1)}}
+      de
+      {{state.totalRecords}}</div>
+  </ng-template>
+
+</p-table>
