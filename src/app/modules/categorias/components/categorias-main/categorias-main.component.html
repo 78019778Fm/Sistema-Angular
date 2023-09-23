@@ -1,5 +1,14 @@
 <div class="panel-container">
+  <h4>{{'CATEGORIAS.TITULO' | translate}}</h4>
   Listado Categorías
+  <!-- BOTONERA DE ACCIONES -->
+  <p-toolbar>
+    <div fxFlex fxLayout="row" fxLayoutGap="5px">
+      <p-button (onClick)="nuevoRegistro()" label="{{'COMUN.ACCION.NUEVO' | translate }}" styleClass="ui-button-info">
+
+      </p-button>
+    </div>
+  </p-toolbar>
   <app-categorias-table #categoriasTable (onColumnSelect)="columnaSeleccionada($event)"
                         (onLazyLoad)="cargarRegistrosTabla($event)"
                         (onRowSelect)="seleccionarRegistro($event)"
@@ -7,6 +16,59 @@
                         [isLoading]="isLoading"
                         [page]="page" [selectedColumnsCategoria]="selectedColumnsCategoria">
   </app-categorias-table>
+  <p-dialog [(visible)]="displayNuevo" [focusTrap]="false" [responsive]="true"
+            [style]="{width: '50em', minWidth: '35em', maxHeight: '95%'}" appendTo="body" modal="true"
+  positionTop="10">
+
+    <p-fieldset>
+      <p-header style="margin-left: -15px">
+        {{textoTituloNuevoEditar}}
+      </p-header>
+      <p-messages [showTransitionOptions]="'300ms'" [hideTransitionOptions]="'500ms'" [(value)]="errores"></p-messages>
+      <div [formGroup]="nuevaCategoriaForm">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12 ui-md-12 pd_top_1">
+              <span class="ui-float-label">
+                <input formControlName="nombre" id="nombre" maxlength="100" minlength="1" pInputText
+                       type="text">
+                <label for="nombre">{{ 'CATEGORIAS.DETAIL.NOMBRE_CATEGORIA' | translate }}
+                  <font color="red">*</font>
+                </label>
+              </span>
+          </div>
+          <div class="ui-g-12 ui-md-12">
+              <span class="ui-float-label">
+                <p-checkbox [binary]="true" formControlName="vigencia"
+                            label="{{ 'CATEGORIAS.DETAIL.VIGENCIA_CATEGORIA' | translate }}" name="verInactivos">
+                </p-checkbox>
+              </span>
+          </div>
+          <div class="ui-g-12 ui-md-12">
+            <p-fileUpload #fileUpload name="file[]" accept="image/*" maxFileSize="3000000"
+                          (onSelect)="onFileSelect($event)" [showUploadButton]="false" [showCancelButton]="false"
+            chooseLabel="Cargar Imagen">
+
+            </p-fileUpload>
+          </div>
+        </div>
+        <div class="ui-g ui-fluid">
+          <div *ngIf="!view" class="pd-top-2" fxLayoutAlign="center">
+            <button (click)="createUpdateRegistro()" [disabled]="!nuevaCategoriaForm.valid"
+                    class="ui-button" icon="pi pi-check" id="createRegistro"
+                    label="{{textoBotonNuevoEditar}}" pButton style="margin-left: 7%">
+            </button>
+            <button (click)="cerrarPopUp()" class="ui-button ui-button-secondary" icon="pi pi-times"
+                    label="{{ 'CATEGORIAS.DETAIL.CANCELAR_CATEGORIA' | translate }}"
+                    pButton
+                    style="margin-left: 5%"
+                    type="button">
+            </button>
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+
+  </p-dialog>
 </div>
 
 

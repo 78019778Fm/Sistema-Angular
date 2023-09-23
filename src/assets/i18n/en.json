@@ -51,10 +51,35 @@
     }
   },
   "CATEGORIAS": {
+    "MENSAJE_SISTEMA": "System message: ",
+    "TITULO": "Categories",
+    "FILTROS": {
+      "NOMBRE_CATEGORIA": "Category",
+      "VER_INACTIVOS": "Show Inactives"
+    },
     "TABLA": {
       "CATEGORIA": "Category",
       "VIGENCIA": "Validity",
       "NO_ELEMENTOS": "No categories"
+    },
+    "DETAIL": {
+      "TITULO_CREATE": "Register Category",
+      "TITULO_UPDATE": "Update Category",
+      "TITULO_VER": "See Categoría",
+      "NOMBRE_CATEGORIA": "Category",
+      "VIGENCIA_CATEGORIA": "Active / Inactive",
+      "CREAR_CATEGORIA": "Save",
+      "EDITAR_CATEGORIA": "Save",
+      "CANCELAR_CATEGORIA": "Cancel",
+      "ELIMINAR_CATEGORIA": "Delete Category",
+      "ALERTA_ELIMINAR": "Are you sure to delete the category?",
+      "ACTIVAR_CATEGORIA": "Activate Category",
+      "ALERTA_ACTIVAR": "Are you sure to activate the category?",
+      "DESACTIVAR_CATEGORIA": "Deactivate Category",
+      "ALERTA_DESACTIVAR": "Are you sure to deactivate the category?"
+    },
+    "ERRORES" : {
+      "IMAGEN_NO_RELLENADA": "The image has not been specified"
     }
   }
 }

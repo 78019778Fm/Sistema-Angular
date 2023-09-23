@@ -51,10 +51,35 @@
     }
   },
   "CATEGORIAS": {
+    "MENSAJE_SISTEMA": "Mensaje del sistema: ",
+    "TITULO": "Categorías",
+    "FILTROS": {
+      "NOMBRE_CATEGORIA": "Categoria",
+      "VER_INACTIVOS": "Ver Inactivos"
+    },
     "TABLA": {
       "CATEGORIA": "Categoría",
       "VIGENCIA": "Vigencia",
       "NO_ELEMENTOS": "No hay categorías"
+    },
+    "DETAIL": {
+      "TITULO_CREATE": "Registrar Categoría",
+      "TITULO_UPDATE": "Actualizar Categoría",
+      "TITULO_VER": "Ver Categoría",
+      "NOMBRE_CATEGORIA": "Categoria",
+      "VIGENCIA_CATEGORIA": "Activo / Inactivo",
+      "CREAR_CATEGORIA": "Guardar",
+      "EDITAR_CATEGORIA": "Guardar",
+      "CANCELAR_CATEGORIA": "Cancelar",
+      "ELIMINAR_CATEGORIA": "Eliminar Categoría",
+      "ALERTA_ELIMINAR": "¿Está seguro de eliminar la categoría?",
+      "ACTIVAR_CATEGORIA": "Activar Categoría",
+      "ALERTA_ACTIVAR": "¿Está seguro de activar la categoría?",
+      "DESACTIVAR_CATEGORIA": "Desactivar Categoría",
+      "ALERTA_DESACTIVAR": "¿Está seguro de desactivar la categoría?"
+    },
+    "ERRORES" : {
+      "IMAGEN_NO_RELLENADA": "La imagen no ha sido especificada"
     }
   }
 }

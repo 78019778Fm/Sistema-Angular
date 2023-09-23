@@ -10,11 +10,16 @@ import {Observable} from 'rxjs';
 import {Page} from '../../../shared/models/page';
 import {Categoria} from '../../../shared/models/categoria';
 import {map} from 'rxjs/operators';
+import {GenericResponse} from '../../../shared/models/generic-response';
+import {DocumentoAlmacenado} from '../../../shared/models/documento-almacenado';
+import {HttpHeaders} from '@angular/common/http';
 
 @Injectable()
 export class CategoriaService extends AbstractService {
 
   private endpoint: string = environment.apiUrl + AppConstants.CATEGORIA_MAIN;
+  private endpointDA: string = environment.apiUrl + AppConstants.DOCUMENTO_ALMACENADO;
+
   constructor(private http: HttpClientPaginationService, private translateService: TranslateService) {
     super();
   }
@@ -32,5 +37,17 @@ export class CategoriaService extends AbstractService {
     filtroCategoria = filtroCategoria.convertCategoriaFilter() as unknown as CategoriaFilter;
     return this.http.postPaginated<Categoria, CategoriaFilter>(this.endpoint + '/filtrar', page, filtroCategoria)
       .pipe(map((response: Page<Categoria>) => this.gestionarPage<Categoria>(response, Categoria)));
+  }
+
+  create(categoria: Categoria): Observable<any> {
+    categoria = categoria.convertCategoria() as unknown as Categoria;
+    return this.http.post(this.endpoint, categoria);
+  }
+
+  guardarImagen(formData: FormData): Observable<GenericResponse<DocumentoAlmacenado>> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/json');
+    return this.http.post<GenericResponse<DocumentoAlmacenado>>(this.endpointDA, formData, {headers}).pipe(
+      map(response => new GenericResponse(response)));
   }
 }

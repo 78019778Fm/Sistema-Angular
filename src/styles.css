@@ -47,3 +47,7 @@ body .ui-widget {
   font-size: 12px !important;
   text-decoration: none;
 }
+
+.pd-top-2 {
+  padding-top: 20px;
+}
