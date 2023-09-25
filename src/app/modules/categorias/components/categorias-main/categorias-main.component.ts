@@ -12,6 +12,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from 'primeng-lts/api';
 import {GenericResponse} from '../../../../shared/models/generic-response';
 import {DocumentoAlmacenado} from '../../../../shared/models/documento-almacenado';
+import {FileUpload} from 'primeng-lts/fileupload';
 
 @Component({
   selector: 'app-categorias-main',
@@ -20,6 +21,7 @@ import {DocumentoAlmacenado} from '../../../../shared/models/documento-almacenad
 })
 export class CategoriasMainComponent extends AbstractComponent implements OnInit {
   @ViewChild('categoriasTable') categoriasTable: CategoriasTableComponent;
+  @ViewChild('fileUpload') fileUpload: FileUpload;
   page: Page<Categoria> = {} as Page<Categoria>;
   registroSeleccionado: Categoria;
   isLoading = true;
@@ -39,7 +41,10 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
   registroCategoria: Categoria;
   selectedFile: File;
   formData = new FormData();
+  imagenUrl: string;
+  disabledComponent = false;
   errores: Message[];
+
   constructor(protected translateService: TranslateService,
               protected categoriaService: CategoriaService,
               protected fb: FormBuilder
@@ -70,6 +75,7 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
       this.colsCategorias = this.categoriaService.cargarColumnasCategoria();
     }
   }
+
   columnaSeleccionada(columns: any) {
     this.colsCategorias = this.categoriaService.cargarColumnasCategoria();
     this.colsCategorias = [];
@@ -112,6 +118,7 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
       this.textoTituloNuevoEditar = this.translateService.instant('CATEGORIAS.DETAIL.TITULO_VER');
     }
   }
+
   guardarDatosImagen() {
     let rellenado = false;
     if (this.selectedFile) {
@@ -146,6 +153,18 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
       }, error => {
         console.log('Error al enviar la imagen', error);
       });
+    } else {
+      if (rellenado) {
+        this.categoriaService.actualizarImagen(this.registroSeleccionado.foto.id, this.formData)
+          .subscribe((response: GenericResponse<DocumentoAlmacenado>) => {
+            this.registroCategoria.foto = response.body;
+            this.finalizarOperacion();
+          }, (error) => {
+            console.log('Error al enviar la imagen', error);
+          });
+      } else {
+        console.log('Falta implementar la actualización solo de los datos de la categoria');
+      }
     }
   }
 
@@ -173,11 +192,40 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
   }
 
   cerrarPopUp() {
+    this.displayNuevo = false;
+    this.view = false;
+    this.nuevaCategoriaForm.reset();
+    this.imagenUrl = null;
+    this.disabledComponent = false;
+    this.cleanFilesFromForm();
+    this.errores = [];
+  }
 
+  cleanFilesFromForm() {
+    this.selectedFile = null;
+    this.fileUpload.clear();
   }
 
   onFileSelect(event: any) {
     this.selectedFile = event.files[0];
     console.log('Archivo seleccionado', this.selectedFile);
+    this.imagenUrl = null;
   }
+
+  editarRegistro() {
+    this.displayNuevo = true;
+    this.cambioTextModal('E');
+    this.categoriaService.getCategoriaById(this.registroSeleccionado.id).pipe(takeUntil(this.destroy$))
+      .subscribe((categoria: Categoria) => {
+        this.registroCategoria = categoria;
+        this.gestionarDtoToReactiveForm();
+      });
+  }
+
+  private gestionarDtoToReactiveForm() {
+    this.nuevaCategoriaForm.patchValue(this.registroCategoria);
+    this.imagenUrl = this.categoriaService.getImagenUrl(this.registroCategoria.foto.completeFileName);
+  }
+
+
 }

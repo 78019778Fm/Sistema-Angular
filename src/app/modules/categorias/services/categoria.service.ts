@@ -50,4 +50,23 @@ export class CategoriaService extends AbstractService {
     return this.http.post<GenericResponse<DocumentoAlmacenado>>(this.endpointDA, formData, {headers}).pipe(
       map(response => new GenericResponse(response)));
   }
+
+  actualizarImagen(id: number, formData: FormData): Observable<GenericResponse<DocumentoAlmacenado>> {
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/json');
+    return this.http.put<GenericResponse<DocumentoAlmacenado>>(`${this.endpointDA}/editImage/${id}`, formData, {headers}).pipe(
+      map(response => new GenericResponse(response)));
+  }
+
+  getCategoriaById(id: number): Observable<Categoria> {
+    return this.http.get(`${this.endpoint}/getById/${id}`).pipe(
+      map(response => new Categoria(response))
+    );
+  }
+
+   getImagenUrl(fileName: string): string {
+    const baseUrl = `${this.endpointDA}/download/`;
+    const uniqueTimestamp = new Date().getTime(); // Valor de tiempo actual como número único
+    return `${baseUrl}${fileName}?timestamp=${uniqueTimestamp}`;
+  }
 }

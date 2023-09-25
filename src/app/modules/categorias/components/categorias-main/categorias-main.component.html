@@ -5,8 +5,11 @@
   <p-toolbar>
     <div fxFlex fxLayout="row" fxLayoutGap="5px">
       <p-button (onClick)="nuevoRegistro()" label="{{'COMUN.ACCION.NUEVO' | translate }}" styleClass="ui-button-info">
-
       </p-button>
+      <p-button (onClick)="editarRegistro()"
+                [disabled]="!(registroSeleccionado && registroSeleccionado.vigenciaString === 'Activo')"
+                label="{{ 'COMUN.ACCION.EDITAR' | translate }}"
+                styleClass="ui-button-info"></p-button>
     </div>
   </p-toolbar>
   <app-categorias-table #categoriasTable (onColumnSelect)="columnaSeleccionada($event)"
@@ -18,7 +21,7 @@
   </app-categorias-table>
   <p-dialog [(visible)]="displayNuevo" [focusTrap]="false" [responsive]="true"
             [style]="{width: '50em', minWidth: '35em', maxHeight: '95%'}" appendTo="body" modal="true"
-  positionTop="10">
+  positionTop="10" (onHide)="cerrarPopUp()">
 
     <p-fieldset>
       <p-header style="margin-left: -15px">
@@ -44,10 +47,12 @@
               </span>
           </div>
           <div class="ui-g-12 ui-md-12">
-            <p-fileUpload #fileUpload name="file[]" accept="image/*" maxFileSize="3000000"
+            <p-fileUpload #fileUpload name="file[]" accept="image/*" maxFileSize="3000000" [disabled]="disabledComponent"
                           (onSelect)="onFileSelect($event)" [showUploadButton]="false" [showCancelButton]="false"
             chooseLabel="Cargar Imagen">
-
+              <ng-template pTemplate="content">
+                <img *ngIf="imagenUrl" [src]="imagenUrl" alt="Imagen cargada" class="imagen-categoria">
+              </ng-template>
             </p-fileUpload>
           </div>
         </div>
