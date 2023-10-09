@@ -9,7 +9,7 @@ import {CategoriaFilter} from '../models/categoria-filter';
 import {Observable} from 'rxjs';
 import {Page} from '../../../shared/models/page';
 import {Categoria} from '../../../shared/models/categoria';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {GenericResponse} from '../../../shared/models/generic-response';
 import {DocumentoAlmacenado} from '../../../shared/models/documento-almacenado';
 import {HttpHeaders} from '@angular/common/http';
@@ -68,5 +68,19 @@ export class CategoriaService extends AbstractService {
     const baseUrl = `${this.endpointDA}/download/`;
     const uniqueTimestamp = new Date().getTime(); // Valor de tiempo actual como número único
     return `${baseUrl}${fileName}?timestamp=${uniqueTimestamp}`;
+  }
+
+  update(categoria: Categoria): Observable<any> {
+    categoria = categoria.convertCategoria() as unknown as Categoria;
+    return this.http.put(`${this.endpoint}/${categoria.id}`, categoria);
+  }
+
+  delete(categoriaId: number): Observable<any> {
+    return this.http.delete(`${this.endpoint}/deleteCategoria/${categoriaId}`);
+  }
+
+  deleteImage(id: number): Observable<GenericResponse<any>> {
+    return this.http.delete(`${this.endpointDA}/deleteImage/${id}`)
+      .pipe(tap((response: any) => new GenericResponse(response)));
   }
 }

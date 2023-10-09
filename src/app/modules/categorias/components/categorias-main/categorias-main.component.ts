@@ -9,7 +9,7 @@ import {CategoriaService} from '../../services/categoria.service';
 import {AbstractComponent} from '../../../../components/shared/abstract.component';
 import {CategoriaFilter} from '../../models/categoria-filter';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Message} from 'primeng-lts/api';
+import {ConfirmationService, Message} from 'primeng-lts/api';
 import {GenericResponse} from '../../../../shared/models/generic-response';
 import {DocumentoAlmacenado} from '../../../../shared/models/documento-almacenado';
 import {FileUpload} from 'primeng-lts/fileupload';
@@ -47,7 +47,8 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
 
   constructor(protected translateService: TranslateService,
               protected categoriaService: CategoriaService,
-              protected fb: FormBuilder
+              protected fb: FormBuilder,
+              protected confirmationService: ConfirmationService
   ) {
     super(translateService);
   }
@@ -158,11 +159,13 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
         this.categoriaService.actualizarImagen(this.registroSeleccionado.foto.id, this.formData)
           .subscribe((response: GenericResponse<DocumentoAlmacenado>) => {
             this.registroCategoria.foto = response.body;
-            this.finalizarOperacion();
+            this.actualizarCategoria();
           }, (error) => {
             console.log('Error al enviar la imagen', error);
           });
       } else {
+        this.registroCategoria.foto = this.registroSeleccionado.foto;
+        this.actualizarCategoria();
         console.log('Falta implementar la actualización solo de los datos de la categoria');
       }
     }
@@ -179,8 +182,16 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
     });
   }
 
+  actualizarCategoria() {
+    this.registroCategoria.id = this.registroSeleccionado.id;
+    this.categoriaService.update(this.registroCategoria).pipe(takeUntil(this.destroy$)).subscribe((e) => {
+      this.finalizarOperacion();
+    });
+  }
+
   finalizarOperacion() {
     this.registroCategoria = new Categoria();
+    this.cleanFilesFromForm();
     this.displayNuevo = false;
     this.actualizarRegistroTabla();
   }
@@ -228,4 +239,26 @@ export class CategoriasMainComponent extends AbstractComponent implements OnInit
   }
 
 
+  confirmarEliminarRegistro() {
+
+    this.confirmationService.confirm({
+      message: this.translateService.instant('CATEGORIAS.DETAIL.ALERTA_ELIMINAR'),
+      header: this.translateService.instant('CATEGORIAS.DETAIL.ELIMINAR_CATEGORIA'),
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.categoriaService.delete(this.registroSeleccionado.id).pipe(takeUntil(this.destroy$))
+          .subscribe(() => {
+            this.categoriaService.deleteImage(this.registroSeleccionado.foto.id).pipe(takeUntil(this.destroy$))
+              .subscribe((response: GenericResponse<any>) => {
+                if (response.rpta === 1) {
+                  this.actualizarRegistroTabla();
+                }
+              });
+          });
+      },
+      reject: () => {
+        console.log('Ocurrio un error durante la eliminación');
+      }
+    });
+  }
 }

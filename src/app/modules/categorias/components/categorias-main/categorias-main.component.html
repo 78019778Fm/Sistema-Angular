@@ -10,6 +10,9 @@
                 [disabled]="!(registroSeleccionado && registroSeleccionado.vigenciaString === 'Activo')"
                 label="{{ 'COMUN.ACCION.EDITAR' | translate }}"
                 styleClass="ui-button-info"></p-button>
+      <p-button (onClick)="confirmarEliminarRegistro()" [disabled]="!(registroSeleccionado && registroSeleccionado.vigenciaString === 'Activo')"
+                label="{{'COMUN.ACCION.ELIMINAR' | translate}}" styleClass="ui-button-info">
+      </p-button>
     </div>
   </p-toolbar>
   <app-categorias-table #categoriasTable (onColumnSelect)="columnaSeleccionada($event)"
@@ -19,6 +22,11 @@
                         [isLoading]="isLoading"
                         [page]="page" [selectedColumnsCategoria]="selectedColumnsCategoria">
   </app-categorias-table>
+
+  <p-confirmDialog acceptLabel="{{'COMUN.ACCION.SI' | translate }}" appendTo="body" icon="pi pi-exclamation-triangle"
+                   rejectLabel="{{'COMUN.ACCION.NO' | translate }}">
+  </p-confirmDialog>
+
   <p-dialog [(visible)]="displayNuevo" [focusTrap]="false" [responsive]="true"
             [style]="{width: '50em', minWidth: '35em', maxHeight: '95%'}" appendTo="body" modal="true"
   positionTop="10" (onHide)="cerrarPopUp()">
